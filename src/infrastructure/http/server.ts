@@ -1,12 +1,16 @@
 import express, { Application, Request, Response } from 'express';
+import swaggerUi from 'swagger-ui-express';
 import { errorHandler } from './middlewares/errorHandler';
 import authRouter from './routes/auth.routes';
+import { swaggerSpec } from '../config/swagger';
 
 export function createServer(): Application {
   const app = express();
 
   app.use(express.json());
   app.use(express.urlencoded({ extended: true }));
+
+  app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
   app.get('/', (_req: Request, res: Response) => {
     res.status(200).json({ message: 'API de Envios JCA' });

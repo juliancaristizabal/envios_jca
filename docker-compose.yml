@@ -20,11 +20,31 @@ services:
     networks:
       - envios_network
 
-  # redis:   <-- se agregará en el siguiente feature
-  #   image: redis:7-alpine
+  redis:
+    image: redis:7-alpine
+    container_name: envios_redis
+    restart: unless-stopped
+    command: >
+      sh -c "if [ -n '$$REDIS_PASSWORD' ];
+      then redis-server --requirepass $$REDIS_PASSWORD;
+      else redis-server; fi"
+    environment:
+      REDIS_PASSWORD: ${REDIS_PASSWORD}
+    ports:
+      - "${REDIS_PORT}:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - envios_network
 
 volumes:
   db_data:
+  redis_data:
 
 networks:
   envios_network:

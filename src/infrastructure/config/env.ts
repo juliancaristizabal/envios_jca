@@ -1,19 +1,25 @@
 import 'dotenv/config';
 
+function requireEnv(key: string): string {
+  const value = process.env[key];
+  if (!value) throw new Error(`Variable de entorno requerida no definida: ${key}`);
+  return value;
+}
+
 export const env = {
   NODE_ENV: process.env.NODE_ENV ?? 'development',
-  PORT: Number(process.env.PORT) || 3000,
+  PORT: Number(requireEnv('PORT')),
 
-  DB_HOST: process.env.DB_HOST ?? 'localhost',
-  DB_PORT: Number(process.env.DB_PORT) || 3306,
-  DB_USER: process.env.DB_USER ?? 'root',
-  DB_PASSWORD: process.env.DB_PASSWORD ?? '',
-  DB_NAME: process.env.DB_NAME ?? '',
+  DB_HOST: requireEnv('DB_HOST'),
+  DB_PORT: Number(requireEnv('DB_PORT')),
+  DB_USER: requireEnv('DB_USER'),
+  DB_PASSWORD: requireEnv('DB_PASSWORD'),
+  DB_NAME: requireEnv('DB_NAME'),
 
-  REDIS_HOST: process.env.REDIS_HOST ?? 'localhost',
-  REDIS_PORT: Number(process.env.REDIS_PORT) || 6379,
+  REDIS_HOST: requireEnv('REDIS_HOST'),
+  REDIS_PORT: Number(requireEnv('REDIS_PORT')),
   REDIS_PASSWORD: process.env.REDIS_PASSWORD ?? '',
 
-  JWT_SECRET: process.env.JWT_SECRET ?? 'changeme',
-  JWT_EXPIRES_IN: process.env.JWT_EXPIRES_IN ?? '7d',
+  JWT_SECRET: requireEnv('JWT_SECRET'),
+  JWT_EXPIRES_IN: requireEnv('JWT_EXPIRES_IN'),
 };

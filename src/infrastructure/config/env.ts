@@ -13,4 +13,7 @@ export const env = {
   REDIS_HOST: process.env.REDIS_HOST ?? 'localhost',
   REDIS_PORT: Number(process.env.REDIS_PORT) || 6379,
   REDIS_PASSWORD: process.env.REDIS_PASSWORD ?? '',
+
+  JWT_SECRET: process.env.JWT_SECRET ?? 'changeme',
+  JWT_EXPIRES_IN: process.env.JWT_EXPIRES_IN ?? '7d',
 };

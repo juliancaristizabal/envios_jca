@@ -1,0 +1,31 @@
+services:
+  db:
+    image: mysql:8
+    container_name: envios_db
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${DB_NAME}
+      MYSQL_USER: ${DB_USER}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+    ports:
+      - "${DB_PORT}:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p${DB_ROOT_PASSWORD}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - envios_network
+
+  # redis:   <-- se agregará en el siguiente feature
+  #   image: redis:7-alpine
+
+volumes:
+  db_data:
+
+networks:
+  envios_network:
+    driver: bridge

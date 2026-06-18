@@ -23,7 +23,7 @@ export class LoginUserUseCase {
     const passwordValid = await bcrypt.compare(dto.password, user.password);
     if (!passwordValid) throw new AppError('Credenciales inválidas', 401);
 
-    const payload: TokenPayload = { id: user.id, email: user.email };
+    const payload: TokenPayload = { id: user.id, email: user.email, role: user.role };
     const token = this.tokenService.sign(payload);
 
     return { token, user: user.toPublic() };

@@ -1,18 +1,19 @@
 import { RowDataPacket, ResultSetHeader } from 'mysql2';
 import { pool } from '../connection';
 import { IUserRepository } from '../../../../domain/repositories/IUserRepository';
-import { User } from '../../../../domain/entities/User';
+import { User, UserRole } from '../../../../domain/entities/User';
 
 interface UserRow extends RowDataPacket {
   id: number;
   name: string;
   email: string;
   password: string;
+  role: UserRole;
   created_at: Date;
 }
 
 function toEntity(row: UserRow): User {
-  return new User(row.id, row.name, row.email, row.password, row.created_at);
+  return new User(row.id, row.name, row.email, row.password, row.role, row.created_at);
 }
 
 export class UserRepository implements IUserRepository {
@@ -33,10 +34,10 @@ export class UserRepository implements IUserRepository {
 
   async save(user: User): Promise<User> {
     const [result] = await pool.query<ResultSetHeader>(
-      'INSERT INTO users (name, email, password, created_at) VALUES (?, ?, ?, ?)',
-      [user.name, user.email, user.password, user.createdAt],
+      'INSERT INTO users (name, email, password, role, created_at) VALUES (?, ?, ?, ?, ?)',
+      [user.name, user.email, user.password, user.role, user.createdAt],
     );
-    return new User(result.insertId, user.name, user.email, user.password, user.createdAt);
+    return new User(result.insertId, user.name, user.email, user.password, user.role, user.createdAt);
   }
 
   async update(id: number, data: Partial<User>): Promise<User | null> {

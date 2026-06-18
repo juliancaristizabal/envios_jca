@@ -11,10 +11,6 @@ export const RegisterUserSchema = z.object({
   password: z
     .string()
     .min(8, 'La contraseña debe tener al menos 8 caracteres'),
-  role: z
-    .enum(['user', 'admin'])
-    .optional()
-    .default('user'),
 });
 
 export type RegisterUserDto = z.infer<typeof RegisterUserSchema>;

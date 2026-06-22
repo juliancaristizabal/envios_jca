@@ -4,6 +4,7 @@ import swaggerUi from 'swagger-ui-express';
 import { errorHandler } from './middlewares/errorHandler';
 import authRouter from './routes/auth.routes';
 import adminRouter from './routes/admin.routes';
+import carrierRouter from './routes/carrier.routes';
 import { swaggerSpec } from '../config/swagger';
 
 export function createServer(): Application {
@@ -21,6 +22,7 @@ export function createServer(): Application {
 
   app.use('/', authRouter);
   app.use('/admin', adminRouter);
+  app.use('/admin/carriers', carrierRouter);
 
   app.use(errorHandler);
 

@@ -3,6 +3,8 @@ import { env } from './infrastructure/config/env';
 import { testConnection } from './infrastructure/database/mysql/connection';
 import { initializeDatabase } from './infrastructure/database/mysql/initializer';
 import { testRedisConnection } from './infrastructure/database/redis/client';
+import { AdminRepository } from './infrastructure/database/mysql/repositories/AdminRepository';
+import { SeedAdminUseCase } from './application/use-cases/admin/SeedAdminUseCase';
 
 async function bootstrap(): Promise<void> {
   await testConnection();
@@ -10,6 +12,14 @@ async function bootstrap(): Promise<void> {
 
   await initializeDatabase();
   console.log('Tablas verificadas');
+
+  const seedAdmin = new SeedAdminUseCase(new AdminRepository());
+  await seedAdmin.execute({
+    name: env.ADMIN_SEED_NAME,
+    email: env.ADMIN_SEED_EMAIL,
+    password: env.ADMIN_SEED_PASSWORD,
+  });
+  console.log('Seed de administrador verificado');
 
   await testRedisConnection();
   console.log('Conexión a Redis establecida');

@@ -22,4 +22,8 @@ export const env = {
 
   JWT_SECRET: requireEnv('JWT_SECRET'),
   JWT_EXPIRES_IN: requireEnv('JWT_EXPIRES_IN'),
+
+  ADMIN_SEED_NAME: requireEnv('ADMIN_SEED_NAME'),
+  ADMIN_SEED_EMAIL: requireEnv('ADMIN_SEED_EMAIL'),
+  ADMIN_SEED_PASSWORD: requireEnv('ADMIN_SEED_PASSWORD'),
 };

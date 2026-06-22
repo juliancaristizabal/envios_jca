@@ -34,6 +34,17 @@ export async function initializeDatabase(): Promise<void> {
     )
   `);
 
+  await pool.query(`
+    CREATE TABLE IF NOT EXISTS routes (
+      id               INT AUTO_INCREMENT PRIMARY KEY,
+      name             VARCHAR(100) NOT NULL,
+      origin_city      VARCHAR(100) NOT NULL,
+      destination_city VARCHAR(100) NOT NULL,
+      estimated_days   INT          NOT NULL,
+      created_at       TIMESTAMP    DEFAULT CURRENT_TIMESTAMP
+    )
+  `);
+
   // Migración: eliminar columna role de users si existía de versiones anteriores
   try {
     await pool.query(`ALTER TABLE users DROP COLUMN role`);

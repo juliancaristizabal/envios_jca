@@ -13,7 +13,7 @@ export class RegisterUserUseCase {
 
     const hashedPassword = await bcrypt.hash(dto.password, 10);
     const user = await this.userRepository.save(
-      new User(0, dto.name, dto.email, hashedPassword, dto.role, new Date()),
+      new User(0, dto.name, dto.email, hashedPassword, new Date()),
     );
 
     return user.toPublic();

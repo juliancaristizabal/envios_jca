@@ -8,7 +8,7 @@ export const CreateShipmentSchema = z.object({
   height: z.number().positive('El alto debe ser mayor a 0'),
   length: z.number().positive('El largo debe ser mayor a 0'),
   productType: z.enum(PRODUCT_TYPES, {
-    errorMap: () => ({ message: `Tipo de producto inválido. Valores permitidos: ${PRODUCT_TYPES.join(', ')}` }),
+    error: `Tipo de producto inválido. Valores permitidos: ${PRODUCT_TYPES.join(', ')}`,
   }),
   destAddress: z.string().min(5, 'La dirección de destino es requerida'),
   destCity: z.string().min(2, 'La ciudad de destino es requerida'),

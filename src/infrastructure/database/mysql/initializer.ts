@@ -68,6 +68,19 @@ export async function initializeDatabase(): Promise<void> {
     )
   `);
 
+  await pool.query(`
+    CREATE TABLE IF NOT EXISTS shipment_tracking (
+      id          INT AUTO_INCREMENT PRIMARY KEY,
+      shipment_id INT          NOT NULL,
+      status      ENUM('pending','assigned','in_transit','delivered','cancelled') NOT NULL,
+      carrier_id  INT          NULL,
+      notes       VARCHAR(500) NULL,
+      changed_at  TIMESTAMP    DEFAULT CURRENT_TIMESTAMP,
+      CONSTRAINT fk_tracking_shipment FOREIGN KEY (shipment_id) REFERENCES shipments(id),
+      CONSTRAINT fk_tracking_carrier  FOREIGN KEY (carrier_id)  REFERENCES carriers(id)
+    )
+  `);
+
   // Migración: eliminar columna role de users si existía de versiones anteriores
   try {
     await pool.query(`ALTER TABLE users DROP COLUMN role`);

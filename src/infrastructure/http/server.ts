@@ -6,6 +6,7 @@ import authRouter from './routes/auth.routes';
 import adminRouter from './routes/admin.routes';
 import carrierRouter from './routes/carrier.routes';
 import routeRouter from './routes/route.routes';
+import shipmentRouter from './routes/shipment.routes';
 import { swaggerSpec } from '../config/swagger';
 
 export function createServer(): Application {
@@ -25,6 +26,7 @@ export function createServer(): Application {
   app.use('/admin', adminRouter);
   app.use('/admin/carriers', carrierRouter);
   app.use('/admin/routes', routeRouter);
+  app.use('/shipments', shipmentRouter);
 
   app.use(errorHandler);
 

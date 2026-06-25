@@ -48,10 +48,15 @@ export class ShipmentRepository implements IShipmentRepository {
     return rows[0] ? toEntity(rows[0]) : null;
   }
 
-  async findAll(): Promise<Shipment[]> {
-    const [rows] = await pool.query<ShipmentRow[]>(
-      'SELECT * FROM shipments ORDER BY created_at DESC',
-    );
+  async findAll(status?: ShipmentStatus): Promise<Shipment[]> {
+    const [rows] = status
+      ? await pool.query<ShipmentRow[]>(
+          'SELECT * FROM shipments WHERE status = ? ORDER BY created_at DESC',
+          [status],
+        )
+      : await pool.query<ShipmentRow[]>(
+          'SELECT * FROM shipments ORDER BY created_at DESC',
+        );
     return rows.map(toEntity);
   }
 

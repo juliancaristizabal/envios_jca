@@ -2,6 +2,9 @@ import { Request, Response, NextFunction } from 'express';
 import { CreateShipmentUseCase } from '../../../application/use-cases/shipment/CreateShipmentUseCase';
 import { GetShipmentsUseCase } from '../../../application/use-cases/shipment/GetShipmentsUseCase';
 import { AssignShipmentUseCase } from '../../../application/use-cases/shipment/AssignShipmentUseCase';
+import { ShipmentStatus } from '../../../domain/entities/Shipment';
+
+const VALID_STATUSES: ShipmentStatus[] = ['pending', 'assigned', 'in_transit', 'delivered', 'cancelled'];
 
 export class ShipmentController {
   constructor(
@@ -30,9 +33,17 @@ export class ShipmentController {
     }
   }
 
-  async getAll(_req: Request, res: Response, next: NextFunction): Promise<void> {
+  async getAll(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
-      const shipments = await this.getShipmentsUseCase.executeAll();
+      const rawStatus = req.query.status as string | undefined;
+      if (rawStatus !== undefined && !VALID_STATUSES.includes(rawStatus as ShipmentStatus)) {
+        res.status(400).json({
+          error: 'Estado inválido',
+          details: [{ field: 'status', message: `Valores permitidos: ${VALID_STATUSES.join(', ')}` }],
+        });
+        return;
+      }
+      const shipments = await this.getShipmentsUseCase.executeAll(rawStatus as ShipmentStatus | undefined);
       res.status(200).json({ data: shipments });
     } catch (error) {
       next(error);

@@ -1,11 +1,11 @@
 import { IShipmentRepository } from '../../../domain/repositories/IShipmentRepository';
-import { Shipment } from '../../../domain/entities/Shipment';
+import { Shipment, ShipmentStatus } from '../../../domain/entities/Shipment';
 
 export class GetShipmentsUseCase {
   constructor(private readonly shipmentRepository: IShipmentRepository) {}
 
-  async executeAll(): Promise<Omit<Shipment, 'toPublic'>[]> {
-    const shipments = await this.shipmentRepository.findAll();
+  async executeAll(status?: ShipmentStatus): Promise<Omit<Shipment, 'toPublic'>[]> {
+    const shipments = await this.shipmentRepository.findAll(status);
     return shipments.map((s) => s.toPublic());
   }
 

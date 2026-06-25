@@ -2,7 +2,7 @@ import { Shipment, ShipmentStatus } from '../entities/Shipment';
 
 export interface IShipmentRepository {
   findById(id: number): Promise<Shipment | null>;
-  findAll(): Promise<Shipment[]>;
+  findAll(status?: ShipmentStatus): Promise<Shipment[]>;
   findByUserId(userId: number): Promise<Shipment[]>;
   save(shipment: Shipment): Promise<Shipment>;
   assignWithLock(
